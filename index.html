@@ -480,6 +480,40 @@
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         margin-top: 2rem;
       }
+
+      /* Best Practices Section */
+      #bestpractices code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Fira Code', 'Consolas', monospace;
+        font-size: 0.9em;
+        color: #4ec9b0;
+      }
+
+      #bestpractices h4 {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      #bestpractices .error-demo {
+        margin-bottom: 2.5rem;
+      }
+
+      #bestpractices ul {
+        padding-left: 2rem;
+      }
+
+      #bestpractices ul li {
+        margin: 0.5rem 0;
+      }
+
+      #bestpractices ul li code {
+        background: rgba(49, 120, 198, 0.2);
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.85em;
+      }
     </style>
   </head>
   <body>
@@ -494,6 +528,7 @@
       <button class="nav-tab" onclick="showSection('comparison')">Code Comparison</button>
       <button class="nav-tab" onclick="showSection('interactive')">Interactive Demo</button>
       <button class="nav-tab" onclick="showSection('features')">Feature Comparison</button>
+      <button class="nav-tab" onclick="showSection('bestpractices')">Best Practices</button>
     </nav>
 
     <main class="content">
@@ -1015,6 +1050,645 @@ data.push({ name: <span class="string">"Alice"</span>, age: <span class="number"
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- Best Practices Section -->
+      <section id="bestpractices" class="section">
+        <h2 style="margin-bottom: 2rem; text-align: center;">TypeScript Mistakes & Best Practices</h2>
+        <p style="text-align: center; color: #888; margin-bottom: 3rem;">Learn from common mistakes and write better TypeScript code</p>
+
+        <!-- Mistake 1 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            1. Using <code>any</code> Excessively
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Overusing <code>any</code> removes type safety, making your code prone to runtime errors.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">let</span> data: <span class="type">any</span>;
+data = <span class="string">"Hello"</span>;
+data = <span class="number">42</span>; <span class="comment">// No type checking</span></pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">let</span> data: <span class="type">unknown</span>;
+data = <span class="string">"Hello"</span>;
+<span class="keyword">if</span> (<span class="keyword">typeof</span> data === <span class="string">"string"</span>) {
+  console.log(data.toUpperCase()); <span class="comment">// Safe to use</span>
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 2 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            2. Ignoring Strict Compiler Options
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Not enabling strict mode weakens TypeScript's type checking.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre>{
+  <span class="string">"compilerOptions"</span>: {
+    <span class="string">"strict"</span>: <span class="keyword">false</span>
+  }
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre>{
+  <span class="string">"compilerOptions"</span>: {
+    <span class="string">"strict"</span>: <span class="keyword">true</span>
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 3 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            3. Not Using Type Inference
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Explicitly typing everything, even when TypeScript can infer it.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">let</span> count: <span class="type">number</span> = <span class="number">0</span>;
+<span class="keyword">let</span> name: <span class="type">string</span> = <span class="string">"John"</span>;</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">let</span> count = <span class="number">0</span>; <span class="comment">// TypeScript infers `number`</span>
+<span class="keyword">let</span> name = <span class="string">"John"</span>; <span class="comment">// TypeScript infers `string`</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 4 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            4. Overusing Non-Null Assertions ( ! )
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Using ! to assert non-null values without proper checks.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">let</span> element = document.getElementById(<span class="string">"myElement"</span>)!;
+element.click(); <span class="comment">// Risky</span></pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">let</span> element = document.getElementById(<span class="string">"myElement"</span>);
+<span class="keyword">if</span> (element) {
+  element.click(); <span class="comment">// Safe</span>
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 5 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            5. Not Handling undefined or null Properly
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Ignoring potential undefined or null values.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">let</span> name = user.profile.name; <span class="comment">// Could throw an error</span></pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">let</span> name = user?.profile?.name ?? <span class="string">"Default Name"</span>; <span class="comment">// Safe</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 6 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            6. Misusing Enums
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Using enums when a union type would suffice.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">enum</span> <span class="type">Status</span> {
+  Active,
+  Inactive,
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">Status</span> = <span class="string">"active"</span> | <span class="string">"inactive"</span>;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 7 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            7. Not Leveraging Utility Types
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Manually creating types when utility types could simplify your code.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">interface</span> <span class="type">User</span> {
+  id: <span class="type">number</span>;
+  name: <span class="type">string</span>;
+  email: <span class="type">string</span>;
+}
+
+<span class="keyword">interface</span> <span class="type">UserPreview</span> {
+  id: <span class="type">number</span>;
+  name: <span class="type">string</span>;
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">UserPreview</span> = Pick&lt;<span class="type">User</span>, <span class="string">"id"</span> | <span class="string">"name"</span>&gt;;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 8 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            8. Ignoring readonly for Immutability
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Not marking properties as readonly when they shouldn't change.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">interface</span> <span class="type">Config</span> {
+  apiUrl: <span class="type">string</span>;
+}
+<span class="keyword">const</span> config: <span class="type">Config</span> = { apiUrl: <span class="string">"https://api.example.com"</span> };
+config.apiUrl = <span class="string">"https://malicious.com"</span>; <span class="comment">// Mutated</span></pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">interface</span> <span class="type">Config</span> {
+  <span class="keyword">readonly</span> apiUrl: <span class="type">string</span>;
+}
+<span class="keyword">const</span> config: <span class="type">Config</span> = { apiUrl: <span class="string">"https://api.example.com"</span> };
+<span class="comment">// config.apiUrl = "..."; // Error</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 9 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            9. Not Using Generics Effectively
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Writing repetitive code instead of using generics.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">function</span> <span class="function">identityNumber</span>(num: <span class="type">number</span>): <span class="type">number</span> {
+  <span class="keyword">return</span> num;
+}
+<span class="keyword">function</span> <span class="function">identityString</span>(str: <span class="type">string</span>): <span class="type">string</span> {
+  <span class="keyword">return</span> str;
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">function</span> <span class="function">identity</span>&lt;<span class="type">T</span>&gt;(value: <span class="type">T</span>): <span class="type">T</span> {
+  <span class="keyword">return</span> value;
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 10 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            10. Ignoring interface vs type Differences
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Using interface and type interchangeably without understanding their differences.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">User</span> = {
+  name: <span class="type">string</span>;
+};
+<span class="keyword">type</span> <span class="type">Admin</span> = <span class="type">User</span> & { role: <span class="type">string</span> };</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">interface</span> <span class="type">User</span> {
+  name: <span class="type">string</span>;
+}
+<span class="keyword">interface</span> <span class="type">Admin</span> <span class="keyword">extends</span> <span class="type">User</span> {
+  role: <span class="type">string</span>;
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Continue with remaining mistakes... I'll add a few more key ones -->
+
+        <!-- Mistake 11 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            11. Not Using as const for Literal Types
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Not preserving literal types when needed.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">const</span> colors = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>]; <span class="comment">// Type: string[]</span></pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">const</span> colors = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>] <span class="keyword">as const</span>;
+<span class="comment">// Type: readonly ["red", "green", "blue"]</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 12 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            12. Not Handling Async Code Properly
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Forgetting to handle promises or using any for async results.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">function</span> <span class="function">fetchData</span>(): Promise&lt;<span class="type">any</span>&gt; {
+  <span class="keyword">return</span> fetch(<span class="string">"/api/data"</span>);
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">async function</span> <span class="function">fetchData</span>(): Promise&lt;<span class="type">MyDataType</span>&gt; {
+  <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">"/api/data"</span>);
+  <span class="keyword">return</span> response.json();
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 13 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            13. Not Using Type Guards
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Not narrowing types with type guards.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">function</span> <span class="function">printValue</span>(value: <span class="type">unknown</span>) {
+  console.log(value.toUpperCase()); <span class="comment">// Error</span>
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">function</span> <span class="function">isString</span>(value: <span class="type">unknown</span>): value <span class="keyword">is</span> <span class="type">string</span> {
+  <span class="keyword">return typeof</span> value === <span class="string">"string"</span>;
+}
+
+<span class="keyword">function</span> <span class="function">printValue</span>(value: <span class="type">unknown</span>) {
+  <span class="keyword">if</span> (isString(value)) {
+    console.log(value.toUpperCase()); <span class="comment">// Safe</span>
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 16 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            16. Not Using keyof for Type-Safe Object Keys
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Accessing object keys without type safety can lead to runtime errors.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">function</span> <span class="function">getValue</span>(obj: <span class="type">any</span>, key: <span class="type">string</span>) {
+  <span class="keyword">return</span> obj[key]; <span class="comment">// No type safety</span>
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">function</span> <span class="function">getValue</span>&lt;<span class="type">T</span>, <span class="type">K</span> <span class="keyword">extends keyof</span> <span class="type">T</span>&gt;(obj: <span class="type">T</span>, key: <span class="type">K</span>) {
+  <span class="keyword">return</span> obj[key]; <span class="comment">// Type-safe</span>
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 17 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            17. Ignoring never for Exhaustiveness Checking
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Not using never to ensure all cases are handled in a union type.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">Shape</span> = <span class="string">"circle"</span> | <span class="string">"square"</span>;
+
+<span class="keyword">function</span> <span class="function">getArea</span>(shape: <span class="type">Shape</span>) {
+  <span class="keyword">if</span> (shape === <span class="string">"circle"</span>) {
+    <span class="keyword">return</span> Math.PI * <span class="number">2</span> ** <span class="number">2</span>;
+  }
+  <span class="comment">// Forgot to handle "square"</span>
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">function</span> <span class="function">getArea</span>(shape: <span class="type">Shape</span>) {
+  <span class="keyword">if</span> (shape === <span class="string">"circle"</span>) <span class="keyword">return</span> Math.PI * <span class="number">2</span> ** <span class="number">2</span>;
+  <span class="keyword">if</span> (shape === <span class="string">"square"</span>) <span class="keyword">return</span> <span class="number">4</span> ** <span class="number">2</span>;
+  <span class="keyword">const</span> _exhaustiveCheck: <span class="type">never</span> = shape;
+  <span class="keyword">throw new</span> Error(`Unknown shape: ${shape}`);
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 18 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            18. Not Using Mapped Types
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Manually creating similar types instead of using mapped types.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">interface</span> <span class="type">User</span> {
+  id: <span class="type">number</span>;
+  name: <span class="type">string</span>;
+  email: <span class="type">string</span>;
+}
+
+<span class="keyword">interface</span> <span class="type">OptionalUser</span> {
+  id?: <span class="type">number</span>;
+  name?: <span class="type">string</span>;
+  email?: <span class="type">string</span>;
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">OptionalUser</span> = Partial&lt;<span class="type">User</span>&gt;;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 19 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            19. Not Using satisfies for Type Validation
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Not validating that an object satisfies a specific type.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">const</span> user = {
+  id: <span class="number">1</span>,
+  name: <span class="string">"John"</span>,
+  <span class="comment">// Missing `email`</span>
+};</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">const</span> user = {
+  id: <span class="number">1</span>,
+  name: <span class="string">"John"</span>,
+  email: <span class="string">"john@example.com"</span>,
+} <span class="keyword">satisfies</span> <span class="type">User</span>;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 20 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            20. Not Using infer in Conditional Types
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Not leveraging infer to extract types dynamically.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">GetReturnType</span>&lt;<span class="type">T</span>&gt; = <span class="type">T</span> <span class="keyword">extends</span> (...args: <span class="type">any</span>[]) =&gt; <span class="type">any</span> ? <span class="type">any</span> : <span class="type">never</span>;</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">GetReturnType</span>&lt;<span class="type">T</span>&gt; = <span class="type">T</span> <span class="keyword">extends</span> (...args: <span class="type">any</span>[]) =&gt; <span class="keyword">infer</span> <span class="type">R</span> ? <span class="type">R</span> : <span class="type">never</span>;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 24 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            24. Not Using Record for Dictionary-Like Objects
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Using any or loose types for dictionary-like objects.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">const</span> users: { [key: <span class="type">string</span>]: <span class="type">any</span> } = {
+  <span class="string">"1"</span>: { name: <span class="string">"John"</span> },
+  <span class="string">"2"</span>: { name: <span class="string">"Jane"</span> },
+};</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">const</span> users: Record&lt;<span class="type">string</span>, { name: <span class="type">string</span> }&gt; = {
+  <span class="string">"1"</span>: { name: <span class="string">"John"</span> },
+  <span class="string">"2"</span>: { name: <span class="string">"Jane"</span> },
+};</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 25 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            25. Not Using Awaited for Unwrapping Promises
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Not properly unwrapping nested promises.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">Result</span> = Promise&lt;Promise&lt;<span class="type">string</span>&gt;&gt;; <span class="comment">// Nested</span></pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">type</span> <span class="type">Result</span> = Awaited&lt;Promise&lt;Promise&lt;<span class="type">string</span>&gt;&gt;&gt;; <span class="comment">// string</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mistake 26 -->
+        <div class="error-demo compile">
+          <h3>
+            <span class="badge success">Best Practice</span>
+            26. Not Using unknown for Catch Clauses
+          </h3>
+          <p style="margin: 1rem 0; color: #ccc;">Using any for catch clauses, which can hide errors.</p>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #ff4444; margin-bottom: 0.5rem;">❌ Bad</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">try</span> {
+  <span class="comment">// Some code</span>
+} <span class="keyword">catch</span> (error: <span class="type">any</span>) {
+  console.log(error.message); <span class="comment">// Unsafe</span>
+}</pre>
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #44ff44; margin-bottom: 0.5rem;">✅ Good</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="keyword">try</span> {
+  <span class="comment">// Some code</span>
+} <span class="keyword">catch</span> (error: <span class="type">unknown</span>) {
+  <span class="keyword">if</span> (error <span class="keyword">instanceof</span> Error) {
+    console.log(error.message); <span class="comment">// Safe</span>
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="interactive-section" style="margin-top: 3rem;">
+          <h2>Key Takeaways</h2>
+          <div style="background: rgba(49, 120, 198, 0.1); padding: 2rem; border-radius: 12px; border-left: 4px solid #3178c6; margin-top: 1rem;">
+            <ul style="line-height: 2; color: #e0e0e0;">
+              <li>Always prefer <code>unknown</code> over <code>any</code> for type safety</li>
+              <li>Enable strict mode in tsconfig.json</li>
+              <li>Use TypeScript's powerful utility types (Pick, Partial, Record, etc.)</li>
+              <li>Leverage type inference to reduce boilerplate</li>
+              <li>Use proper null/undefined handling with optional chaining (?.) and nullish coalescing (??)</li>
+              <li>Implement type guards for runtime type checking</li>
+              <li>Use <code>readonly</code> for immutability</li>
+              <li>Leverage generics for reusable, type-safe code</li>
+              <li>Use exhaustiveness checking with <code>never</code> type</li>
+              <li>Properly type async/await code</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: rgba(0,0,0,0.2); border-radius: 12px;">
+          <p style="font-size: 1.1rem; color: #888;">
+            By avoiding these common mistakes and following best practices, you can write more robust, maintainable, and type-safe TypeScript code.
+          </p>
+          <p style="margin-top: 1rem; color: #3178c6; font-weight: 600;">
+            Happy Coding! 🚀
+          </p>
         </div>
       </section>
     </main>
