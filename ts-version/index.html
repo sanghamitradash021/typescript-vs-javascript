@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TypeScript Version - Type-Safe Demo</title>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+      .success-banner {
+        background: linear-gradient(135deg, #51cf66, #40c057);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(81, 207, 102, 0.3);
+      }
+      .success-banner h2 {
+        margin: 0 0 0.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .ts-badge {
+        background: #3178c6;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 1rem;
+      }
+      .success-count {
+        background: rgba(0,0,0,0.2);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        font-size: 1.2rem;
+      }
+      .success-count strong {
+        font-size: 2rem;
+        display: block;
+      }
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+      .tab-btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        background: rgba(255,255,255,0.1);
+        color: inherit;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .tab-btn:hover {
+        background: rgba(255,255,255,0.2);
+      }
+      .tab-btn.active {
+        background: #3178c6;
+        color: white;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: #3178c6;
+        text-decoration: none;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      .feature-list {
+        text-align: left;
+        max-width: 700px;
+        margin: 1rem auto;
+      }
+      .feature-list li {
+        margin: 0.75rem 0;
+        line-height: 1.5;
+      }
+      .feature-list code {
+        background: rgba(49, 120, 198, 0.2);
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+      .code-hint {
+        background: rgba(49, 120, 198, 0.15);
+        border: 1px solid #3178c6;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <a href="../index.html" class="back-link">&larr; Back to Comparison</a>
+
+      <span class="ts-badge">TS</span>
+      <h1>TypeScript Version</h1>
+
+      <div class="success-banner">
+        <h2>Zero Runtime Errors!</h2>
+        <p>TypeScript caught all bugs at <strong>COMPILE TIME</strong> - before the code even runs!</p>
+        <div class="success-count">
+          <strong>0</strong>
+          Runtime errors - all bugs prevented at compile time
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('features')">TypeScript Features</button>
+        <button class="tab-btn" onclick="showTab('advanced')">Advanced Examples</button>
+        <button class="tab-btn" onclick="showTab('errors')">See Errors Demo</button>
+        <button class="tab-btn" onclick="showTab('form')">Form Demo</button>
+      </div>
+
+      <div id="features" class="tab-content active">
+        <h2>TypeScript Safety Features</h2>
+        <p>These features prevent the 15+ bugs found in the JavaScript version:</p>
+        <ul class="feature-list">
+          <li><strong>Static Type Checking</strong> - <code>function add(a: number, b: number): number</code></li>
+          <li><strong>Interface Definitions</strong> - <code>interface User { name: string; email: string; }</code></li>
+          <li><strong>Null Safety</strong> - <code>user: User | null</code> forces null checks</li>
+          <li><strong>Autocomplete</strong> - IDE suggests valid properties and methods</li>
+          <li><strong>Typo Detection</strong> - Misspelled properties show immediate errors</li>
+          <li><strong>Argument Validation</strong> - Wrong number/type of arguments caught instantly</li>
+        </ul>
+      </div>
+
+      <div id="advanced" class="tab-content">
+        <h2>Advanced TypeScript Features</h2>
+        <p>See <code>src/advanced-examples.ts</code> for these powerful features:</p>
+        <ul class="feature-list">
+          <li><strong>Generics</strong> - <code>function first&lt;T&gt;(arr: T[]): T</code> - type-safe reusable functions</li>
+          <li><strong>Enums</strong> - <code>enum Status { Pending, Active, Done }</code> - named constants</li>
+          <li><strong>Discriminated Unions</strong> - <code>{ success: true; data: T } | { success: false; error: string }</code></li>
+          <li><strong>Type Guards</strong> - Runtime type narrowing with full type safety</li>
+          <li><strong>Utility Types</strong> - <code>Partial&lt;T&gt;</code>, <code>Pick&lt;T, K&gt;</code>, <code>Omit&lt;T, K&gt;</code></li>
+          <li><strong>Mapped Types</strong> - Transform types automatically</li>
+          <li><strong>Async/Await Types</strong> - <code>Promise&lt;User[]&gt;</code> - fully typed async code</li>
+        </ul>
+      </div>
+
+      <div id="errors" class="tab-content">
+        <h2>View Compile-Time Errors</h2>
+        <div class="code-hint">
+          <h3 style="margin-top: 0;">How to See TypeScript Errors:</h3>
+          <ol style="text-align: left; padding-left: 1.5rem;">
+            <li>Open <code>src/errors-demo.ts</code> in VS Code or any TypeScript-aware editor</li>
+            <li>You'll see <strong style="color: #ff6b6b;">red squiggly lines</strong> under the errors</li>
+            <li>Hover over them to see the error messages</li>
+            <li>These are the SAME bugs from the JS version - but caught BEFORE runtime!</li>
+          </ol>
+        </div>
+
+        <h3>Or run the TypeScript compiler:</h3>
+        <div style="background: #1e1e1e; padding: 1rem; border-radius: 8px; font-family: monospace; text-align: left;">
+          <p style="color: #888; margin: 0;">$ npm run check-errors-demo</p>
+          <p style="color: #ff6b6b; margin: 0.5rem 0 0 0;">
+            error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'<br>
+            error TS2345: Argument of type 'null' is not assignable to parameter of type 'User'<br>
+            error TS2551: Property 'emial' does not exist. Did you mean 'email'?<br>
+            ... and more
+          </p>
+        </div>
+      </div>
+
+      <div id="form" class="tab-content">
+        <h2>Type-Safe Form Demo</h2>
+        <p>This form has full type safety - age is guaranteed to be a number:</p>
+
+        <form id="dataForm">
+          <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+          </div>
+          <div>
+            <label for="age">Age:</label>
+            <input type="number" id="age" required>
+          </div>
+          <button type="submit">Add Data (TS)</button>
+        </form>
+
+        <h3>Submitted Data</h3>
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Type of Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be inserted here -->
+          </tbody>
+        </table>
+        <p style="color: #51cf66; font-size: 0.9rem;">Age is properly converted to a number with validation!</p>
+      </div>
+    </div>
+
+    <script>
+      function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+      }
+    </script>
+    <script type="module" src="./src/script.ts"></script>
+  </body>
+</html>

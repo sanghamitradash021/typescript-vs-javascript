@@ -1,0 +1,22 @@
+{
+  "name": "typescript-vs-javascript-demo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Interactive demo comparing TypeScript and JavaScript - see the difference between compile-time and runtime errors",
+  "scripts": {
+    "dev": "vite --config vite.config.main.js",
+    "dev-js": "vite --config vite.config.js",
+    "dev-ts": "vite --config vite.config.ts",
+    "build": "vite build --config vite.config.main.js",
+    "check-ts": "tsc --project ts-version/tsconfig.json",
+    "check-errors-demo": "tsc ts-version/src/errors-demo.ts --strict --noEmit --lib ES2022,DOM",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.2.4",
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["typescript", "javascript", "demo", "comparison", "learning"],
+  "license": "MIT"
+}

@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/public/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TypeScript vs JavaScript - Interactive Demo</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        min-height: 100vh;
+        color: #e0e0e0;
+      }
+
+      .header {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        background: linear-gradient(90deg, #f7df1e, #3178c6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+      }
+
+      .header p {
+        color: #888;
+        font-size: 1.1rem;
+      }
+
+      .nav-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.2);
+        flex-wrap: wrap;
+      }
+
+      .nav-tab {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+        color: #e0e0e0;
+      }
+
+      .nav-tab:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .nav-tab.active {
+        background: linear-gradient(135deg, #3178c6, #235a97);
+        color: white;
+        box-shadow: 0 4px 15px rgba(49, 120, 198, 0.4);
+      }
+
+      .nav-tab.js-tab.active {
+        background: linear-gradient(135deg, #f7df1e, #d4b800);
+        color: #1a1a1a;
+      }
+
+      .content {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .section {
+        display: none;
+      }
+
+      .section.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Side by Side Comparison */
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 1rem;
+      }
+
+      @media (max-width: 900px) {
+        .comparison-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .code-panel {
+        background: #1e1e1e;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .panel-header {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+      }
+
+      .panel-header.js {
+        background: linear-gradient(90deg, #f7df1e20, transparent);
+        border-bottom: 2px solid #f7df1e;
+      }
+
+      .panel-header.ts {
+        background: linear-gradient(90deg, #3178c620, transparent);
+        border-bottom: 2px solid #3178c6;
+      }
+
+      .panel-header .icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 12px;
+      }
+
+      .panel-header .icon.js {
+        background: #f7df1e;
+        color: #1a1a1a;
+      }
+
+      .panel-header .icon.ts {
+        background: #3178c6;
+        color: white;
+      }
+
+      .code-block {
+        padding: 1rem;
+        overflow-x: auto;
+        font-family: 'Fira Code', 'Consolas', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .code-block pre {
+        margin: 0;
+      }
+
+      .error-line {
+        background: rgba(255, 0, 0, 0.15);
+        border-left: 3px solid #ff4444;
+        margin: 0 -1rem;
+        padding: 0 1rem;
+        display: block;
+      }
+
+      .success-line {
+        background: rgba(0, 255, 0, 0.1);
+        border-left: 3px solid #44ff44;
+        margin: 0 -1rem;
+        padding: 0 1rem;
+        display: block;
+      }
+
+      .comment { color: #6a9955; }
+      .keyword { color: #569cd6; }
+      .string { color: #ce9178; }
+      .number { color: #b5cea8; }
+      .type { color: #4ec9b0; }
+      .function { color: #dcdcaa; }
+      .variable { color: #9cdcfe; }
+
+      /* Error Examples Section */
+      .error-demo {
+        background: #1e1e1e;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid;
+      }
+
+      .error-demo.runtime {
+        border-left-color: #ff4444;
+      }
+
+      .error-demo.compile {
+        border-left-color: #44ff44;
+      }
+
+      .error-demo h3 {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .badge.danger {
+        background: #ff4444;
+        color: white;
+      }
+
+      .badge.success {
+        background: #44ff44;
+        color: #1a1a1a;
+      }
+
+      .result-box {
+        background: #2d2d2d;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        font-family: monospace;
+      }
+
+      .result-box.error {
+        border: 1px solid #ff4444;
+      }
+
+      .result-box.success {
+        border: 1px solid #44ff44;
+      }
+
+      /* Interactive Demo */
+      .interactive-section {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+
+      .interactive-section h2 {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin: 0.5rem;
+      }
+
+      .btn-js {
+        background: #f7df1e;
+        color: #1a1a1a;
+      }
+
+      .btn-ts {
+        background: #3178c6;
+        color: white;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .console-output {
+        background: #0d0d0d;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+        font-family: monospace;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .console-line {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid #222;
+      }
+
+      .console-line.error {
+        color: #ff6b6b;
+      }
+
+      .console-line.success {
+        color: #69db7c;
+      }
+
+      .console-line.warning {
+        color: #ffd43b;
+      }
+
+      /* Stats Section */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .stat-card h3 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-card.js h3 {
+        color: #f7df1e;
+      }
+
+      .stat-card.ts h3 {
+        color: #3178c6;
+      }
+
+      /* Feature Comparison Table */
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .comparison-table th {
+        background: rgba(0, 0, 0, 0.3);
+        font-weight: 600;
+      }
+
+      .comparison-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .check {
+        color: #44ff44;
+        font-size: 1.2rem;
+      }
+
+      .cross {
+        color: #ff4444;
+        font-size: 1.2rem;
+      }
+
+      /* Links Section */
+      .links-section {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .demo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #e0e0e0;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .demo-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .demo-link.js-link {
+        border: 2px solid #f7df1e;
+      }
+
+      .demo-link.ts-link {
+        border: 2px solid #3178c6;
+      }
+
+      /* Timeline */
+      .timeline {
+        position: relative;
+        padding: 2rem 0;
+      }
+
+      .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(-50%);
+      }
+
+      .timeline-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2rem 0;
+        position: relative;
+      }
+
+      .timeline-content {
+        width: 45%;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+      }
+
+      .timeline-content.left {
+        margin-right: auto;
+        margin-left: 0;
+      }
+
+      .timeline-content.right {
+        margin-left: auto;
+        margin-right: 0;
+      }
+
+      @media (max-width: 768px) {
+        .timeline::before {
+          left: 20px;
+        }
+        .timeline-content {
+          width: calc(100% - 50px);
+          margin-left: 50px !important;
+        }
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1>TypeScript vs JavaScript</h1>
+      <p>See the difference between compile-time and runtime error detection</p>
+    </header>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" onclick="showSection('overview')">Overview</button>
+      <button class="nav-tab" onclick="showSection('errors')">Error Examples</button>
+      <button class="nav-tab" onclick="showSection('comparison')">Code Comparison</button>
+      <button class="nav-tab" onclick="showSection('interactive')">Interactive Demo</button>
+      <button class="nav-tab" onclick="showSection('features')">Feature Comparison</button>
+    </nav>
+
+    <main class="content">
+      <!-- Overview Section -->
+      <section id="overview" class="section active">
+        <div class="stats-grid">
+          <div class="stat-card js">
+            <h3>5</h3>
+            <p>Runtime Errors in JS Demo</p>
+          </div>
+          <div class="stat-card ts">
+            <h3>0</h3>
+            <p>Runtime Errors in TS Demo</p>
+          </div>
+          <div class="stat-card">
+            <h3>100%</h3>
+            <p>Bugs Caught at Compile Time</p>
+          </div>
+          <div class="stat-card">
+            <h3>7+</h3>
+            <p>Error Types Demonstrated</p>
+          </div>
+        </div>
+
+        <div class="interactive-section">
+          <h2>The Core Difference</h2>
+          <div class="comparison-grid">
+            <div class="code-panel">
+              <div class="panel-header js">
+                <span class="icon js">JS</span>
+                JavaScript - Errors at Runtime
+              </div>
+              <div class="code-block">
+                <pre>
+<span class="comment">// This code runs... then crashes</span>
+<span class="keyword">function</span> <span class="function">calculateTotal</span>(price, quantity) {
+  <span class="keyword">return</span> price + quantity;
+}
+
+<span class="comment">// Bug: passing string instead of number</span>
+<span class="error-line"><span class="keyword">const</span> total = <span class="function">calculateTotal</span>(<span class="string">"100"</span>, <span class="number">5</span>);</span>
+<span class="comment">// Returns "1005" not 105!</span>
+<span class="comment">// No error shown until you check the result</span>
+                </pre>
+              </div>
+            </div>
+            <div class="code-panel">
+              <div class="panel-header ts">
+                <span class="icon ts">TS</span>
+                TypeScript - Errors at Compile Time
+              </div>
+              <div class="code-block">
+                <pre>
+<span class="comment">// TypeScript catches this BEFORE running</span>
+<span class="keyword">function</span> <span class="function">calculateTotal</span>(
+  price: <span class="type">number</span>,
+  quantity: <span class="type">number</span>
+): <span class="type">number</span> {
+  <span class="keyword">return</span> price + quantity;
+}
+
+<span class="success-line"><span class="comment">// Error: Argument of type 'string'</span></span>
+<span class="success-line"><span class="comment">// is not assignable to 'number'</span></span>
+<span class="keyword">const</span> total = <span class="function">calculateTotal</span>(<span class="number">100</span>, <span class="number">5</span>);
+<span class="comment">// Returns 105 (correct!)</span>
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="links-section">
+          <a href="./js-version/index.html" class="demo-link js-link" target="_blank">
+            <span class="icon js">JS</span>
+            Open JavaScript Demo
+          </a>
+          <a href="./ts-version/index.html" class="demo-link ts-link" target="_blank">
+            <span class="icon ts">TS</span>
+            Open TypeScript Demo
+          </a>
+        </div>
+      </section>
+
+      <!-- Error Examples Section -->
+      <section id="errors" class="section">
+        <h2 style="margin-bottom: 2rem;">Common Bugs TypeScript Catches</h2>
+
+        <div class="error-demo runtime">
+          <h3>
+            <span class="badge danger">Runtime Error</span>
+            1. Type Coercion Bug
+          </h3>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #f7df1e;">JavaScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="function">calculateTotal</span>(<span class="string">"100"</span>, <span class="number">5</span>)</pre>
+              </div>
+              <div class="result-box error">
+                Result: "1005" (string concatenation!)
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #3178c6;">TypeScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="function">calculateTotal</span>(<span class="number">100</span>, <span class="number">5</span>)</pre>
+              </div>
+              <div class="result-box success">
+                Result: 105 (correct math!)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="error-demo runtime">
+          <h3>
+            <span class="badge danger">Runtime Error</span>
+            2. Null/Undefined Access
+          </h3>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #f7df1e;">JavaScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="function">getUserEmail</span>(<span class="keyword">null</span>)</pre>
+              </div>
+              <div class="result-box error">
+                TypeError: Cannot read property 'email' of null
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #3178c6;">TypeScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="function">getUserEmail</span>(user: <span class="type">User | null</span>)</pre>
+              </div>
+              <div class="result-box success">
+                Compiler error: Object is possibly 'null'
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="error-demo runtime">
+          <h3>
+            <span class="badge danger">Runtime Error</span>
+            3. Misspelled Property
+          </h3>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #f7df1e;">JavaScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre>userProfile.<span class="error-line" style="display: inline;">emial</span></pre>
+              </div>
+              <div class="result-box error">
+                Result: undefined (silent failure)
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #3178c6;">TypeScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre>userProfile.<span class="variable">email</span> <span class="comment">// autocomplete!</span></pre>
+              </div>
+              <div class="result-box success">
+                Property 'emial' does not exist. Did you mean 'email'?
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="error-demo runtime">
+          <h3>
+            <span class="badge danger">Runtime Error</span>
+            4. Missing Function Arguments
+          </h3>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #f7df1e;">JavaScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="function">greetUser</span>(<span class="string">"Alice"</span>)</pre>
+              </div>
+              <div class="result-box error">
+                Result: "Hello, Alice undefined!"
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #3178c6;">TypeScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre><span class="function">greetUser</span>(<span class="string">"Alice"</span>, <span class="string">"Smith"</span>)</pre>
+              </div>
+              <div class="result-box success">
+                Expected 2 arguments, but got 1
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="error-demo runtime">
+          <h3>
+            <span class="badge danger">Runtime Error</span>
+            5. Non-existent Method
+          </h3>
+          <div class="comparison-grid">
+            <div>
+              <h4 style="color: #f7df1e;">JavaScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre>numbers.<span class="error-line" style="display: inline;">flattern</span>()</pre>
+              </div>
+              <div class="result-box error">
+                TypeError: numbers.flattern is not a function
+              </div>
+            </div>
+            <div>
+              <h4 style="color: #3178c6;">TypeScript</h4>
+              <div class="code-block" style="background: #2d2d2d; border-radius: 8px;">
+                <pre>numbers.<span class="function">flat</span>() <span class="comment">// autocomplete suggests!</span></pre>
+              </div>
+              <div class="result-box success">
+                Property 'flattern' does not exist. Did you mean 'flat'?
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Code Comparison Section -->
+      <section id="comparison" class="section">
+        <h2 style="margin-bottom: 2rem;">Side-by-Side Code Comparison</h2>
+
+        <h3 style="margin: 2rem 0 1rem;">Function Definitions</h3>
+        <div class="comparison-grid">
+          <div class="code-panel">
+            <div class="panel-header js">
+              <span class="icon js">JS</span>
+              JavaScript
+            </div>
+            <div class="code-block">
+              <pre>
+<span class="comment">// No type information</span>
+<span class="keyword">function</span> <span class="function">calculateTotal</span>(price, quantity) {
+  <span class="keyword">return</span> price + quantity;
+}
+
+<span class="comment">// No protection against null</span>
+<span class="keyword">function</span> <span class="function">getUserEmail</span>(user) {
+  <span class="keyword">return</span> user.email;
+}
+
+<span class="comment">// Arguments can be anything</span>
+<span class="keyword">function</span> <span class="function">greetUser</span>(firstName, lastName) {
+  <span class="keyword">return</span> <span class="string">`Hello, ${firstName} ${lastName}!`</span>;
+}
+              </pre>
+            </div>
+          </div>
+          <div class="code-panel">
+            <div class="panel-header ts">
+              <span class="icon ts">TS</span>
+              TypeScript
+            </div>
+            <div class="code-block">
+              <pre>
+<span class="comment">// Explicit types for parameters and return</span>
+<span class="keyword">function</span> <span class="function">calculateTotal</span>(
+  price: <span class="type">number</span>,
+  quantity: <span class="type">number</span>
+): <span class="type">number</span> {
+  <span class="keyword">return</span> price + quantity;
+}
+
+<span class="comment">// Null safety with union types</span>
+<span class="keyword">function</span> <span class="function">getUserEmail</span>(user: <span class="type">User | null</span>): <span class="type">string</span> {
+  <span class="keyword">if</span> (user === <span class="keyword">null</span>) <span class="keyword">return</span> <span class="string">"No user"</span>;
+  <span class="keyword">return</span> user.email;
+}
+
+<span class="comment">// Required arguments enforced</span>
+<span class="keyword">function</span> <span class="function">greetUser</span>(
+  firstName: <span class="type">string</span>,
+  lastName: <span class="type">string</span>
+): <span class="type">string</span> {
+  <span class="keyword">return</span> <span class="string">`Hello, ${firstName} ${lastName}!`</span>;
+}
+              </pre>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem;">Data Structures</h3>
+        <div class="comparison-grid">
+          <div class="code-panel">
+            <div class="panel-header js">
+              <span class="icon js">JS</span>
+              JavaScript
+            </div>
+            <div class="code-block">
+              <pre>
+<span class="comment">// Plain object - any shape allowed</span>
+<span class="keyword">const</span> user = {
+  name: <span class="string">"John"</span>,
+  email: <span class="string">"john@example.com"</span>,
+  age: <span class="number">30</span>
+};
+
+<span class="comment">// Array can mix types</span>
+<span class="keyword">const</span> data = [];
+data.push({ name: <span class="string">"Alice"</span>, age: <span class="string">"25"</span> }); <span class="comment">// string age!</span>
+data.push({ name: <span class="string">"Bob"</span> }); <span class="comment">// missing age!</span>
+              </pre>
+            </div>
+          </div>
+          <div class="code-panel">
+            <div class="panel-header ts">
+              <span class="icon ts">TS</span>
+              TypeScript
+            </div>
+            <div class="code-block">
+              <pre>
+<span class="comment">// Interface defines exact shape</span>
+<span class="keyword">interface</span> <span class="type">User</span> {
+  name: <span class="type">string</span>;
+  email: <span class="type">string</span>;
+  age: <span class="type">number</span>;
+}
+
+<span class="keyword">const</span> user: <span class="type">User</span> = {
+  name: <span class="string">"John"</span>,
+  email: <span class="string">"john@example.com"</span>,
+  age: <span class="number">30</span>
+};
+
+<span class="comment">// Type-safe array</span>
+<span class="keyword">const</span> data: <span class="type">User[]</span> = [];
+data.push({ name: <span class="string">"Alice"</span>, age: <span class="number">25</span>, email: <span class="string">"..."</span> });
+<span class="comment">// Error if missing required fields!</span>
+              </pre>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem;">Advanced TypeScript Features</h3>
+        <div class="code-panel" style="max-width: 800px; margin: 0 auto;">
+          <div class="panel-header ts">
+            <span class="icon ts">TS</span>
+            TypeScript - Generics, Enums & More
+          </div>
+          <div class="code-block">
+            <pre>
+<span class="comment">// Generics - reusable type-safe functions</span>
+<span class="keyword">function</span> <span class="function">firstElement</span>&lt;<span class="type">T</span>&gt;(arr: <span class="type">T[]</span>): <span class="type">T</span> | <span class="type">undefined</span> {
+  <span class="keyword">return</span> arr[<span class="number">0</span>];
+}
+
+<span class="keyword">const</span> num = <span class="function">firstElement</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);    <span class="comment">// type: number | undefined</span>
+<span class="keyword">const</span> str = <span class="function">firstElement</span>([<span class="string">"a"</span>, <span class="string">"b"</span>]);  <span class="comment">// type: string | undefined</span>
+
+<span class="comment">// Enums - named constants</span>
+<span class="keyword">enum</span> <span class="type">Status</span> {
+  Pending = <span class="string">"PENDING"</span>,
+  Active = <span class="string">"ACTIVE"</span>,
+  Completed = <span class="string">"COMPLETED"</span>
+}
+
+<span class="keyword">const</span> taskStatus: <span class="type">Status</span> = <span class="type">Status</span>.Active;
+
+<span class="comment">// Discriminated Unions - type-safe state handling</span>
+<span class="keyword">type</span> <span class="type">Result</span>&lt;<span class="type">T</span>&gt; =
+  | { success: <span class="keyword">true</span>; data: <span class="type">T</span> }
+  | { success: <span class="keyword">false</span>; error: <span class="type">string</span> };
+
+<span class="keyword">function</span> <span class="function">handleResult</span>(result: <span class="type">Result</span>&lt;<span class="type">User</span>&gt;) {
+  <span class="keyword">if</span> (result.success) {
+    console.log(result.data.name); <span class="comment">// TS knows data exists!</span>
+  } <span class="keyword">else</span> {
+    console.log(result.error); <span class="comment">// TS knows error exists!</span>
+  }
+}
+            </pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Demo Section -->
+      <section id="interactive" class="section">
+        <h2 style="margin-bottom: 1rem;">Interactive Error Demonstration</h2>
+        <p style="color: #888; margin-bottom: 2rem;">Click the buttons to run code and see the difference in error handling</p>
+
+        <div class="comparison-grid">
+          <div class="code-panel">
+            <div class="panel-header js">
+              <span class="icon js">JS</span>
+              JavaScript Runtime
+            </div>
+            <div style="padding: 1rem;">
+              <button class="btn btn-js" onclick="runJSDemo('typeCoercion')">Type Coercion</button>
+              <button class="btn btn-js" onclick="runJSDemo('nullAccess')">Null Access</button>
+              <button class="btn btn-js" onclick="runJSDemo('typo')">Property Typo</button>
+              <button class="btn btn-js" onclick="runJSDemo('missingArg')">Missing Arg</button>
+              <button class="btn btn-js" onclick="runJSDemo('badMethod')">Bad Method</button>
+            </div>
+            <div class="console-output" id="js-console">
+              <div class="console-line" style="color: #888;">Click a button to run JavaScript code...</div>
+            </div>
+          </div>
+          <div class="code-panel">
+            <div class="panel-header ts">
+              <span class="icon ts">TS</span>
+              TypeScript Compiler
+            </div>
+            <div style="padding: 1rem;">
+              <button class="btn btn-ts" onclick="runTSDemo('typeCoercion')">Type Coercion</button>
+              <button class="btn btn-ts" onclick="runTSDemo('nullAccess')">Null Access</button>
+              <button class="btn btn-ts" onclick="runTSDemo('typo')">Property Typo</button>
+              <button class="btn btn-ts" onclick="runTSDemo('missingArg')">Missing Arg</button>
+              <button class="btn btn-ts" onclick="runTSDemo('badMethod')">Bad Method</button>
+            </div>
+            <div class="console-output" id="ts-console">
+              <div class="console-line" style="color: #888;">Click a button to see TypeScript errors...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="links-section" style="margin-top: 3rem;">
+          <a href="./js-version/index.html" class="demo-link js-link" target="_blank">
+            Open Full JavaScript Demo (with Console Errors)
+          </a>
+          <a href="./ts-version/index.html" class="demo-link ts-link" target="_blank">
+            Open Full TypeScript Demo (Error-Free)
+          </a>
+        </div>
+      </section>
+
+      <!-- Feature Comparison Section -->
+      <section id="features" class="section">
+        <h2 style="margin-bottom: 2rem;">Feature Comparison</h2>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th style="color: #f7df1e;">JavaScript</th>
+              <th style="color: #3178c6;">TypeScript</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Static Type Checking</td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>IDE Autocomplete</td>
+              <td>Limited</td>
+              <td><span class="check">✓</span> Full support</td>
+            </tr>
+            <tr>
+              <td>Compile-Time Errors</td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Interfaces & Types</td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Enums</td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Generics</td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Refactoring Safety</td>
+              <td><span class="cross">✗</span> Manual checking</td>
+              <td><span class="check">✓</span> Compiler validates</td>
+            </tr>
+            <tr>
+              <td>Learning Curve</td>
+              <td><span class="check">✓</span> Lower</td>
+              <td>Moderate</td>
+            </tr>
+            <tr>
+              <td>Build Step Required</td>
+              <td><span class="cross">✗</span> No</td>
+              <td><span class="check">✓</span> Yes</td>
+            </tr>
+            <tr>
+              <td>Browser Support</td>
+              <td><span class="check">✓</span> Direct</td>
+              <td>Compiles to JS</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="interactive-section">
+          <h3>When to Use Each</h3>
+          <div class="comparison-grid" style="margin-top: 1rem;">
+            <div style="background: rgba(247, 223, 30, 0.1); padding: 1.5rem; border-radius: 8px; border: 1px solid #f7df1e;">
+              <h4 style="color: #f7df1e; margin-bottom: 1rem;">Use JavaScript When:</h4>
+              <ul style="list-style: none; line-height: 2;">
+                <li>Small scripts or prototypes</li>
+                <li>Quick proof of concepts</li>
+                <li>Learning web development</li>
+                <li>Legacy codebases</li>
+                <li>Simple DOM manipulation</li>
+              </ul>
+            </div>
+            <div style="background: rgba(49, 120, 198, 0.1); padding: 1.5rem; border-radius: 8px; border: 1px solid #3178c6;">
+              <h4 style="color: #3178c6; margin-bottom: 1rem;">Use TypeScript When:</h4>
+              <ul style="list-style: none; line-height: 2;">
+                <li>Large applications</li>
+                <li>Team collaboration</li>
+                <li>Long-term projects</li>
+                <li>Complex business logic</li>
+                <li>API integrations</li>
+                <li>Code that needs to be maintainable</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>TypeScript vs JavaScript Demo | Built with Vite</p>
+      <p style="margin-top: 0.5rem;">
+        Run <code style="background: #333; padding: 2px 8px; border-radius: 4px;">npm run dev-js</code> or
+        <code style="background: #333; padding: 2px 8px; border-radius: 4px;">npm run dev-ts</code> to start the individual demos
+      </p>
+    </footer>
+
+    <script>
+      function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+        // Show selected section
+        document.getElementById(sectionId).classList.add('active');
+        event.target.classList.add('active');
+      }
+
+      function runJSDemo(type) {
+        const console = document.getElementById('js-console');
+        let output = '';
+
+        switch(type) {
+          case 'typeCoercion':
+            const result = "100" + 5;
+            output = `
+              <div class="console-line warning">Running: calculateTotal("100", 5)</div>
+              <div class="console-line">Result: "${result}"</div>
+              <div class="console-line error">Bug! Expected 105, got string "1005"</div>
+              <div class="console-line error">JavaScript silently performed string concatenation</div>
+            `;
+            break;
+          case 'nullAccess':
+            output = `
+              <div class="console-line warning">Running: getUserEmail(null)</div>
+              <div class="console-line error">TypeError: Cannot read property 'email' of null</div>
+              <div class="console-line error">Application crashed at runtime!</div>
+            `;
+            break;
+          case 'typo':
+            output = `
+              <div class="console-line warning">Running: userProfile.emial</div>
+              <div class="console-line">Result: undefined</div>
+              <div class="console-line error">Silent failure - no error thrown</div>
+              <div class="console-line error">The typo 'emial' went unnoticed</div>
+            `;
+            break;
+          case 'missingArg':
+            output = `
+              <div class="console-line warning">Running: greetUser("Alice")</div>
+              <div class="console-line">Result: "Hello, Alice undefined!"</div>
+              <div class="console-line error">Missing argument silently became undefined</div>
+            `;
+            break;
+          case 'badMethod':
+            output = `
+              <div class="console-line warning">Running: [1,2,3].flattern()</div>
+              <div class="console-line error">TypeError: [1,2,3].flattern is not a function</div>
+              <div class="console-line error">Typo only discovered when code executed</div>
+            `;
+            break;
+        }
+
+        console.innerHTML = output;
+      }
+
+      function runTSDemo(type) {
+        const console = document.getElementById('ts-console');
+        let output = '';
+
+        switch(type) {
+          case 'typeCoercion':
+            output = `
+              <div class="console-line success">TypeScript Compiler Check...</div>
+              <div class="console-line error">Error at line 5:</div>
+              <div class="console-line error">Argument of type 'string' is not assignable to parameter of type 'number'</div>
+              <div class="console-line success">Bug caught BEFORE code runs!</div>
+            `;
+            break;
+          case 'nullAccess':
+            output = `
+              <div class="console-line success">TypeScript Compiler Check...</div>
+              <div class="console-line error">Error at line 8:</div>
+              <div class="console-line error">Object is possibly 'null'</div>
+              <div class="console-line success">Must handle null case before accessing properties</div>
+            `;
+            break;
+          case 'typo':
+            output = `
+              <div class="console-line success">TypeScript Compiler Check...</div>
+              <div class="console-line error">Error at line 12:</div>
+              <div class="console-line error">Property 'emial' does not exist on type 'UserProfile'</div>
+              <div class="console-line success">Did you mean 'email'?</div>
+            `;
+            break;
+          case 'missingArg':
+            output = `
+              <div class="console-line success">TypeScript Compiler Check...</div>
+              <div class="console-line error">Error at line 15:</div>
+              <div class="console-line error">Expected 2 arguments, but got 1</div>
+              <div class="console-line success">Missing 'lastName' parameter</div>
+            `;
+            break;
+          case 'badMethod':
+            output = `
+              <div class="console-line success">TypeScript Compiler Check...</div>
+              <div class="console-line error">Error at line 18:</div>
+              <div class="console-line error">Property 'flattern' does not exist on type 'number[]'</div>
+              <div class="console-line success">Did you mean 'flat'?</div>
+            `;
+            break;
+        }
+
+        console.innerHTML = output;
+      }
+    </script>
+  </body>
+</html>

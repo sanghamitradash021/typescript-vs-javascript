@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Version - Runtime Errors Demo</title>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+      .warning-banner {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      }
+      .warning-banner h2 {
+        margin: 0 0 0.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .js-badge {
+        background: #f7df1e;
+        color: #1a1a1a;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 1rem;
+      }
+      .error-count {
+        background: rgba(0,0,0,0.2);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        font-size: 1.2rem;
+      }
+      .error-count strong {
+        font-size: 2rem;
+        display: block;
+      }
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      .tab-btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        background: rgba(255,255,255,0.1);
+        color: inherit;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .tab-btn:hover {
+        background: rgba(255,255,255,0.2);
+      }
+      .tab-btn.active {
+        background: #f7df1e;
+        color: #1a1a1a;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: #f7df1e;
+        text-decoration: none;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <a href="../index.html" class="back-link">&larr; Back to Comparison</a>
+
+      <span class="js-badge">JS</span>
+      <h1>JavaScript Version</h1>
+
+      <div class="warning-banner">
+        <h2>Runtime Errors Demo</h2>
+        <p><strong>Press F12</strong> to open Developer Tools and see the <strong>Console</strong> tab.</p>
+        <p>All errors appear at <strong>RUNTIME</strong> - not while writing code!</p>
+        <div class="error-count">
+          <strong>15+</strong>
+          Runtime errors demonstrated in the console
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('basic')">Basic Errors (5)</button>
+        <button class="tab-btn" onclick="showTab('advanced')">Advanced Problems (10)</button>
+        <button class="tab-btn" onclick="showTab('form')">Form Demo</button>
+      </div>
+
+      <div id="basic" class="tab-content active">
+        <h2>Basic Runtime Errors</h2>
+        <p>Check the console (F12) to see these 5 common JavaScript errors:</p>
+        <ol style="text-align: left; max-width: 600px; margin: 1rem auto;">
+          <li><strong>Type Coercion Bug</strong> - "100" + 5 = "1005" instead of 105</li>
+          <li><strong>Null/Undefined Access</strong> - Crashes when accessing null.property</li>
+          <li><strong>Misspelled Property</strong> - userProfile.emial returns undefined</li>
+          <li><strong>Missing Arguments</strong> - greetUser("Alice") shows "Hello, Alice undefined!"</li>
+          <li><strong>Non-existent Method</strong> - array.flattern() crashes at runtime</li>
+        </ol>
+      </div>
+
+      <div id="advanced" class="tab-content">
+        <h2>Advanced JavaScript Problems</h2>
+        <p>Check the console (F12) to see these 10 real-world bugs:</p>
+        <ol style="text-align: left; max-width: 600px; margin: 1rem auto;">
+          <li><strong>No Generic Safety</strong> - Functions return unpredictable types</li>
+          <li><strong>Magic Strings</strong> - Typos in status strings go unnoticed</li>
+          <li><strong>No Union Safety</strong> - Accessing .data on error responses</li>
+          <li><strong>No Type Guards</strong> - Calling wrong methods on objects</li>
+          <li><strong>No Utility Types</strong> - Accidentally exposing sensitive data</li>
+          <li><strong>Async Confusion</strong> - Forgetting await returns a Promise</li>
+          <li><strong>No Interface Enforcement</strong> - Missing required methods</li>
+          <li><strong>No Shape Validation</strong> - Missing required properties</li>
+          <li><strong>Array Method Confusion</strong> - Wrong callback parameters</li>
+          <li><strong>Deep Property Access</strong> - Undefined properties silently fail</li>
+        </ol>
+      </div>
+
+      <div id="form" class="tab-content">
+        <h2>Working Form Demo</h2>
+        <p>This form works, but notice the console for type issues:</p>
+
+        <form id="dataForm">
+          <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+          </div>
+          <div>
+            <label for="age">Age:</label>
+            <input type="number" id="age" required>
+          </div>
+          <button type="submit">Add Data (JS)</button>
+        </form>
+
+        <h3>Submitted Data</h3>
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Type of Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be inserted here -->
+          </tbody>
+        </table>
+        <p style="color: #ff6b6b; font-size: 0.9rem;">Notice: Age is stored as a string, not a number!</p>
+      </div>
+    </div>
+
+    <script>
+      function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+      }
+    </script>
+    <script type="module" src="./script.js"></script>
+    <script type="module" src="./advanced-problems.js"></script>
+  </body>
+</html>
